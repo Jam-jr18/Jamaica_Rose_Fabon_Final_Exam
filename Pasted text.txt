@@ -1,0 +1,92 @@
+Make a gym web that title Co-Fit and operate the membership system that have a costumer that see the trainer and price peso in interface member dashboard and add that in the different page the triner dashboard the see it member and saw the payment days and time and also the admin dashboard that will saw all make the staff, member and admin that login, and in the interface it was shows the staff trainer and in the admin it will can edit the locate us details and if i avail the it will pay e wallet or cash and after availling it will choose the trainer and also it will show on the member  the trainer and the time that it set on the trainer and also on payment it shows the history payment and the transaction and in the trainer portal dashboard make it functionable and in the my members it was shows the all member and their time , schedule and payment, and also the profile of the trainer it can also edit the it will preview on the interface and also the payment history. and the admin portal was also have a trainer account approval and also  nake this functionable Overview
+Manage Members
+Manage Trainers
+Payments make this nav functionable Dashboard
+My Members
+Schedule in trainer portal, member portal Dashboard
+My Trainer
+Payments and admin portal Overview
+Manage Members
+Manage Trainers
+Payments in the trainer portal ithe trainer was can set schedule adjust schedule it can add if that day leg day or etc. and in the admin portal it will can manage the members and in managing trainers the admin can add and update and delete and in the payment ot can view the all history of all payment of the members the trainer was can set the schedule to the client and the member can add a another session, and the trainer can edit also the profile the photo profile and etc. and the members can track the progress  and in the Weekly Schedule in traner was can set the schedule on the client and in this part Choose Your Plan
+Flexible memberships for every fitness level.
+
+Basic
+₱1,500
+/mo
+Gym Access
+Locker Room
+2 Guest Passes/mo
+GET STARTED NOW
+Pro
+₱2,500
+/mo
+Gym Access
+Locker Room
+Personal Trainer
+Group Classes
+GET STARTED NOW
+Elite
+₱5,000
+/mo
+24/7 Access
+Private Locker
+Personal Trainer
+Nutrition Plan
+Spa & Sauna
+GET STARTED NOW if you click the plan it will show that it will choose the trainer then pay  Choose Your Plan if you click one of it it will make you a sign up for newbie the member will see the schedule callendar of each session on the trainer and the trainer profile was upload the profile photo and the trainer can set the schedule to his client until it will get and track and achieve his goal and it also can adjust the schedule on cayrgory if it leg day, armday or etc. and in the admin in the manage trainers, admin can add new staff and make a user and password to login trainer portal and also it can see the whole schedule of member and trainer in the callendar by setting session make it the will popup like form and category and change yhis Weekly Schedule
+Welcome back, John Doe
+
+Adjust Weekly Schedule
++ Add Time Slot
+
+Monday
+08:00 AM - 12:00 PM
+Workout Focus (e.g. Leg Day)
+
+
+Wednesday
+08:00 AM - 12:00 PM
+Workout Focus (e.g. Leg Day)
+
+
+Friday
+08:00 AM - 12:00 PM
+Workout Focus (e.g. Leg Day)
+ into callendar that where the trainer set to its client and also on adding staff make it have a preview and fill and in the payment in admin it also shows the trainer of the member and the weight, height and etc. of the member and it will track on the trainer and admin remove this Need an extra push?
+Add another session to your schedule this week.
+
++ ADD SESSION and also the member have a profile and  also tracks it weight and height complete the Track Your Progress and in the member profile it can upload the photo and in the trainer portal was add a callendar on the schedule  and in the client make the session member status live  and in the admin and manage members  it can delete and edit and the member was also can change plan and in the add trainer it upload photo and make the admin 1 user and password and if the trainer not match the user and password on the admin, it will error make this 10+
+Expert Trainers
+500+
+Active Members
+24/7
+Gym Access
+15+
+Daily Classes it exact on the data and add also a review to the trainer and also add in the track process the height and remove the body fat and make the login portal that look pro  and make the website like proffesional website in the action look and add that shows in admin manage trainers the user and password in the trainer was in different its not connect in other trainer membeer if it add new it was new trainer the admin also can edit this Locate Us
+123 Fitness Ave, Makati City, Metro Manila, Philippines
++63 (02) 8888-9999
+Mon-Sun: 24/7 Access and amake this function START YOUR JOURNEY
+VIEW CLASSES add a settings on admin that can edit this Locate Us
+123 Fitness Ave, Makati City, Metro Manila, Philippines
++63 (02) 8888-9999
+Mon-Sun: 24/7 Access and make the member its own and if create new its new and if the password not match it will invalid make this function Track Your Progress and the admin will see the user and password of the members and once I create a new account it will permanent can access the owner of the account not only alice but all and fix the log in on the trainer and the account same to the admin fix the member kanang ug ako maghimo ko ug new account it will new and if I log in the user and password and it back the account and if I log the another member account it will log the other account in what is the input on wha t profile it is and same on the trainer fix this that if will log in in account Member Identity	Credentials	Subscription	Live Status	Administrative Action
+
+a
+mes39cena7
+a@gmail.com
+123
+elite	
+Active
+
+
+
+s
+m316ykzddm
+1@gmail.com
+1234
+basic	
+Active
+
+ it in exact account kasabot ka> Distinct Profiles: When you create a new account (Newbie Signup), the system now stores your specific email and password. When you log in with those details, you will see your progress profile, your payments, and your assigned trainer.
+Account Switching: If you log out and log in with a different set of credentials (e.g., Alice's account vs. your new account), the system will log in the exact user and password account and it can proceed on what the account transaction delete the all member account and trainer, kasbaot ka o bolok gyud ka kapila na gyud ko balik balik na lahi lahi lageh nga log in ug ang i type nimo ang email ug password ma to imong account ug wanay labot si alice samok  c e na si alice, ug unsay trasaction sa usa ka account wat labot ng uban  kasabot ka? examole nag sign up ko ug new account tas nag avil ko sa premium tas nag logout ko then once  mag log in ko sa same user ug password mao nga account ang ahong ma proceed nga g himo kasabot? add function to the  dashboard,My trainer,my progress,my profile and payments to the member portal in the trainer it can upload photo to the my profile and add profile on the nav and have a client progress  and in the change photo on profile picture it will upload photo from the files give a zip file and this a laravel project
