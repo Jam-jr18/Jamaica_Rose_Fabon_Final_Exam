@@ -10,8 +10,8 @@ dotenv.config();
 const app = express();
 
 app.use(cors());
-app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(express.static('public'));
 
@@ -28,12 +28,17 @@ const db = mysql.createConnection({
     }
 });
 
+// CONNECT DATABASE
+
 db.connect((err) => {
+
     if (err) {
+        console.log('DATABASE ERROR');
         console.log(err);
     } else {
         console.log('Connected to Aiven MySQL');
     }
+
 });
 
 // HOME PAGE
@@ -49,12 +54,16 @@ app.get('/students', (req, res) => {
     const sql = 'SELECT * FROM students';
 
     db.query(sql, (err, result) => {
+
         if (err) {
             console.log(err);
-            res.status(500).send(err);
-        } else {
-            res.json(result);
+
+            return res.status(500).json({
+                error: err.message
+            });
         }
+
+        res.json(result);
     });
 });
 
@@ -78,34 +87,51 @@ app.post('/add-student', (req, res) => {
 
     db.query(
         sql,
-        [student_id, full_name, course, year_level, email],
+        [
+            student_id,
+            full_name,
+            course,
+            year_level,
+            email
+        ],
         (err, result) => {
+
             if (err) {
+
                 console.log(err);
-                res.status(500).send(err);
-            } else {
-                res.send('Student Added');
+
+                return res.status(500).json({
+                    error: err.message
+                });
             }
+
+            res.json({
+                success: true
+            });
         }
     );
 });
 
-// GET SINGLE STUDENT
+// DELETE STUDENT
 
-app.get('/student/:id', (req, res) => {
+app.delete('/delete-student/:id', (req, res) => {
 
     const id = req.params.id;
 
-    const sql = 'SELECT * FROM students WHERE id=?';
+    db.query(
+        'DELETE FROM students WHERE id=?',
+        [id],
+        (err, result) => {
 
-    db.query(sql, [id], (err, result) => {
-        if (err) {
-            console.log(err);
-            res.status(500).send(err);
-        } else {
-            res.json(result[0]);
+            if (err) {
+                return res.status(500).json(err);
+            }
+
+            res.json({
+                success: true
+            });
         }
-    });
+    );
 });
 
 // UPDATE STUDENT
@@ -134,37 +160,46 @@ app.put('/update-student/:id', (req, res) => {
 
     db.query(
         sql,
-        [student_id, full_name, course, year_level, email, id],
+        [
+            student_id,
+            full_name,
+            course,
+            year_level,
+            email,
+            id
+        ],
         (err, result) => {
+
             if (err) {
-                console.log(err);
-                res.status(500).send(err);
-            } else {
-                res.send('Student Updated');
+                return res.status(500).json(err);
             }
+
+            res.json({
+                success: true
+            });
         }
     );
 });
 
-// DELETE STUDENT
+// GET SINGLE STUDENT
 
-app.delete('/delete-student/:id', (req, res) => {
+app.get('/student/:id', (req, res) => {
 
     const id = req.params.id;
 
-    const sql = 'DELETE FROM students WHERE id=?';
+    db.query(
+        'SELECT * FROM students WHERE id=?',
+        [id],
+        (err, result) => {
 
-    db.query(sql, [id], (err, result) => {
-        if (err) {
-            console.log(err);
-            res.status(500).send(err);
-        } else {
-            res.send('Student Deleted');
+            if (err) {
+                return res.status(500).json(err);
+            }
+
+            res.json(result[0]);
         }
-    });
+    );
 });
-
-// SERVER
 
 const PORT = process.env.PORT || 3000;
 
