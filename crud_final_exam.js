@@ -3,13 +3,16 @@ const mysql = require('mysql2');
 const bodyParser = require('body-parser');
 const path = require('path');
 const dotenv = require('dotenv');
+const cors = require('cors');
 
 dotenv.config();
 
 const app = express();
 
+app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+
 app.use(express.static('public'));
 
 const db = mysql.createConnection({
@@ -31,8 +34,10 @@ db.connect((err) => {
     }
 });
 
+// SHOW INDEX.HTML
+
 app.get('/', (req, res) => {
-    res.send('Student Information Management System Running');
+    res.sendFile(path.join(__dirname, 'views', 'index.html'));
 });
 
 const PORT = process.env.PORT || 3000;
