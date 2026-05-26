@@ -15,6 +15,8 @@ app.use(bodyParser.json());
 
 app.use(express.static('public'));
 
+// MYSQL CONNECTION
+
 const db = mysql.createConnection({
     host: process.env.DB_HOST,
     port: process.env.DB_PORT,
@@ -34,11 +36,135 @@ db.connect((err) => {
     }
 });
 
-// SHOW INDEX.HTML
+// HOME PAGE
 
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'views', 'index.html'));
 });
+
+// GET ALL STUDENTS
+
+app.get('/students', (req, res) => {
+
+    const sql = 'SELECT * FROM students';
+
+    db.query(sql, (err, result) => {
+        if (err) {
+            console.log(err);
+            res.status(500).send(err);
+        } else {
+            res.json(result);
+        }
+    });
+});
+
+// ADD STUDENT
+
+app.post('/add-student', (req, res) => {
+
+    const {
+        student_id,
+        full_name,
+        course,
+        year_level,
+        email
+    } = req.body;
+
+    const sql = `
+        INSERT INTO students
+        (student_id, full_name, course, year_level, email)
+        VALUES (?, ?, ?, ?, ?)
+    `;
+
+    db.query(
+        sql,
+        [student_id, full_name, course, year_level, email],
+        (err, result) => {
+            if (err) {
+                console.log(err);
+                res.status(500).send(err);
+            } else {
+                res.send('Student Added');
+            }
+        }
+    );
+});
+
+// GET SINGLE STUDENT
+
+app.get('/student/:id', (req, res) => {
+
+    const id = req.params.id;
+
+    const sql = 'SELECT * FROM students WHERE id=?';
+
+    db.query(sql, [id], (err, result) => {
+        if (err) {
+            console.log(err);
+            res.status(500).send(err);
+        } else {
+            res.json(result[0]);
+        }
+    });
+});
+
+// UPDATE STUDENT
+
+app.put('/update-student/:id', (req, res) => {
+
+    const id = req.params.id;
+
+    const {
+        student_id,
+        full_name,
+        course,
+        year_level,
+        email
+    } = req.body;
+
+    const sql = `
+        UPDATE students
+        SET student_id=?,
+            full_name=?,
+            course=?,
+            year_level=?,
+            email=?
+        WHERE id=?
+    `;
+
+    db.query(
+        sql,
+        [student_id, full_name, course, year_level, email, id],
+        (err, result) => {
+            if (err) {
+                console.log(err);
+                res.status(500).send(err);
+            } else {
+                res.send('Student Updated');
+            }
+        }
+    );
+});
+
+// DELETE STUDENT
+
+app.delete('/delete-student/:id', (req, res) => {
+
+    const id = req.params.id;
+
+    const sql = 'DELETE FROM students WHERE id=?';
+
+    db.query(sql, [id], (err, result) => {
+        if (err) {
+            console.log(err);
+            res.status(500).send(err);
+        } else {
+            res.send('Student Deleted');
+        }
+    });
+});
+
+// SERVER
 
 const PORT = process.env.PORT || 3000;
 
