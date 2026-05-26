@@ -1,13 +1,23 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Student Information Management System</title>
+
+    <title>
+        Student Information Management System
+    </title>
+
     <link rel="stylesheet" href="/style.css">
+
 </head>
+
 <body>
 
 <nav>
-    <h1>Student Information Management System</h1>
+
+    <h1>
+        Student Information Management System
+    </h1>
+
 </nav>
 
 <div class="container">
@@ -15,13 +25,46 @@
     <h2>Add Student</h2>
 
     <form id="studentForm">
-        <input type="text" id="student_id" placeholder="Student ID" required>
-        <input type="text" id="full_name" placeholder="Full Name" required>
-        <input type="text" id="course" placeholder="Course" required>
-        <input type="text" id="year_level" placeholder="Year Level" required>
-        <input type="email" id="email" placeholder="Email Address" required>
 
-        <button type="submit">Add Student</button>
+        <input
+            type="text"
+            id="student_id"
+            placeholder="Student ID"
+            required
+        >
+
+        <input
+            type="text"
+            id="full_name"
+            placeholder="Full Name"
+            required
+        >
+
+        <input
+            type="text"
+            id="course"
+            placeholder="Course"
+            required
+        >
+
+        <input
+            type="text"
+            id="year_level"
+            placeholder="Year Level"
+            required
+        >
+
+        <input
+            type="email"
+            id="email"
+            placeholder="Email Address"
+            required
+        >
+
+        <button type="submit">
+            Add Student
+        </button>
+
     </form>
 
     <hr>
@@ -29,7 +72,9 @@
     <h2>Student List</h2>
 
     <table>
+
         <thead>
+
             <tr>
                 <th>ID</th>
                 <th>Student ID</th>
@@ -39,9 +84,11 @@
                 <th>Email</th>
                 <th>Actions</th>
             </tr>
+
         </thead>
 
         <tbody id="studentTable"></tbody>
+
     </table>
 
 </div>
