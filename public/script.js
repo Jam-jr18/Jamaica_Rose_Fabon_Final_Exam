@@ -1,208 +1,146 @@
-const express = require('express');
-const mysql = require('mysql2');
-const bodyParser = require('body-parser');
-const path = require('path');
-const dotenv = require('dotenv');
-const cors = require('cors');
+const form = document.getElementById('studentForm');
+const studentTable = document.getElementById('studentTable');
 
-dotenv.config();
+// LOAD STUDENTS
 
-const app = express();
+async function loadStudents() {
 
-app.use(cors());
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+    const response = await fetch('/students');
 
-app.use(express.static('public'));
+    const students = await response.json();
 
-// MYSQL CONNECTION
+    studentTable.innerHTML = '';
 
-const db = mysql.createConnection({
-    host: process.env.DB_HOST,
-    port: process.env.DB_PORT,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME,
-    ssl: {
-        rejectUnauthorized: false
-    }
-});
+    students.forEach(student => {
 
-// CONNECT DATABASE
+        studentTable.innerHTML += `
+            <tr>
+                <td>${student.id}</td>
+                <td>${student.student_id}</td>
+                <td>${student.full_name}</td>
+                <td>${student.course}</td>
+                <td>${student.year_level}</td>
+                <td>${student.email}</td>
 
-db.connect((err) => {
+                <td>
+                    <button onclick="editStudent(${student.id})">
+                        Edit
+                    </button>
 
-    if (err) {
-        console.log('DATABASE ERROR');
-        console.log(err);
-    } else {
-        console.log('Connected to Aiven MySQL');
-    }
-
-});
-
-// HOME PAGE
-
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'views', 'index.html'));
-});
-
-// GET ALL STUDENTS
-
-app.get('/students', (req, res) => {
-
-    const sql = 'SELECT * FROM students';
-
-    db.query(sql, (err, result) => {
-
-        if (err) {
-            console.log(err);
-
-            return res.status(500).json({
-                error: err.message
-            });
-        }
-
-        res.json(result);
+                    <button onclick="deleteStudent(${student.id})">
+                        Delete
+                    </button>
+                </td>
+            </tr>
+        `;
     });
-});
+}
+
+// LOAD TABLE
+
+loadStudents();
 
 // ADD STUDENT
 
-app.post('/add-student', (req, res) => {
+form.addEventListener('submit', async (e) => {
 
-    const {
-        student_id,
-        full_name,
-        course,
-        year_level,
-        email
-    } = req.body;
+    e.preventDefault();
 
-    const sql = `
-        INSERT INTO students
-        (student_id, full_name, course, year_level, email)
-        VALUES (?, ?, ?, ?, ?)
-    `;
+    const student = {
 
-    db.query(
-        sql,
-        [
+        student_id:
+            document.getElementById('student_id').value,
+
+        full_name:
+            document.getElementById('full_name').value,
+
+        course:
+            document.getElementById('course').value,
+
+        year_level:
+            document.getElementById('year_level').value,
+
+        email:
+            document.getElementById('email').value
+    };
+
+    const response = await fetch('/add-student', {
+
+        method: 'POST',
+
+        headers: {
+            'Content-Type': 'application/json'
+        },
+
+        body: JSON.stringify(student)
+    });
+
+    const data = await response.json();
+
+    if (data.success) {
+
+        alert('Student Added Successfully');
+
+        form.reset();
+
+        loadStudents();
+
+    } else {
+
+        alert('Failed to Add Student');
+    }
+});
+
+// DELETE
+
+async function deleteStudent(id) {
+
+    await fetch(`/delete-student/${id}`, {
+        method: 'DELETE'
+    });
+
+    loadStudents();
+}
+
+// EDIT
+
+async function editStudent(id) {
+
+    const response = await fetch(`/student/${id}`);
+
+    const student = await response.json();
+
+    const student_id =
+        prompt('Student ID', student.student_id);
+
+    const full_name =
+        prompt('Full Name', student.full_name);
+
+    const course =
+        prompt('Course', student.course);
+
+    const year_level =
+        prompt('Year Level', student.year_level);
+
+    const email =
+        prompt('Email', student.email);
+
+    await fetch(`/update-student/${id}`, {
+
+        method: 'PUT',
+
+        headers: {
+            'Content-Type': 'application/json'
+        },
+
+        body: JSON.stringify({
             student_id,
             full_name,
             course,
             year_level,
             email
-        ],
-        (err, result) => {
+        })
+    });
 
-            if (err) {
-
-                console.log(err);
-
-                return res.status(500).json({
-                    error: err.message
-                });
-            }
-
-            res.json({
-                success: true
-            });
-        }
-    );
-});
-
-// DELETE STUDENT
-
-app.delete('/delete-student/:id', (req, res) => {
-
-    const id = req.params.id;
-
-    db.query(
-        'DELETE FROM students WHERE id=?',
-        [id],
-        (err, result) => {
-
-            if (err) {
-                return res.status(500).json(err);
-            }
-
-            res.json({
-                success: true
-            });
-        }
-    );
-});
-
-// UPDATE STUDENT
-
-app.put('/update-student/:id', (req, res) => {
-
-    const id = req.params.id;
-
-    const {
-        student_id,
-        full_name,
-        course,
-        year_level,
-        email
-    } = req.body;
-
-    const sql = `
-        UPDATE students
-        SET student_id=?,
-            full_name=?,
-            course=?,
-            year_level=?,
-            email=?
-        WHERE id=?
-    `;
-
-    db.query(
-        sql,
-        [
-            student_id,
-            full_name,
-            course,
-            year_level,
-            email,
-            id
-        ],
-        (err, result) => {
-
-            if (err) {
-                return res.status(500).json(err);
-            }
-
-            res.json({
-                success: true
-            });
-        }
-    );
-});
-
-// GET SINGLE STUDENT
-
-app.get('/student/:id', (req, res) => {
-
-    const id = req.params.id;
-
-    db.query(
-        'SELECT * FROM students WHERE id=?',
-        [id],
-        (err, result) => {
-
-            if (err) {
-                return res.status(500).json(err);
-            }
-
-            res.json(result[0]);
-        }
-    );
-});
-
-const PORT = process.env.PORT || 3000;
-
-app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
-});
+    loadStudents();
+}
