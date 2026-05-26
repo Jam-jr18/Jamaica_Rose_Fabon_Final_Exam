@@ -1,140 +1,46 @@
-const form = document.getElementById('studentForm');
-const studentTable = document.getElementById('studentTable');
+app.post('/add-student', (req, res) => {
 
-// LOAD STUDENTS
+    console.log(req.body);
 
-async function loadStudents() {
+    const {
+        student_id,
+        full_name,
+        course,
+        year_level,
+        email
+    } = req.body;
 
-    const response = await fetch('/students');
-    const students = await response.json();
+    const sql = `
+        INSERT INTO students
+        (student_id, full_name, course, year_level, email)
+        VALUES (?, ?, ?, ?, ?)
+    `;
 
-    studentTable.innerHTML = '';
+    db.query(
+        sql,
+        [
+            student_id,
+            full_name,
+            course,
+            year_level,
+            email
+        ],
+        (err, result) => {
 
-    students.forEach(student => {
+            if (err) {
 
-        studentTable.innerHTML += `
-            <tr>
-                <td>${student.id}</td>
-                <td>${student.student_id}</td>
-                <td>${student.full_name}</td>
-                <td>${student.course}</td>
-                <td>${student.year_level}</td>
-                <td>${student.email}</td>
+                console.log('MYSQL ERROR');
+                console.log(err);
 
-                <td>
-                    <button onclick="editStudent(${student.id})">
-                        Edit
-                    </button>
+                return res.status(500).json({
+                    error: err.message
+                });
+            }
 
-                    <button onclick="deleteStudent(${student.id})">
-                        Delete
-                    </button>
-                </td>
-            </tr>
-        `;
-    });
-}
-
-// LOAD ON START
-
-loadStudents();
-
-// ADD STUDENT
-
-form.addEventListener('submit', async (e) => {
-
-    e.preventDefault();
-
-    const student = {
-        student_id: document.getElementById('student_id').value,
-        full_name: document.getElementById('full_name').value,
-        course: document.getElementById('course').value,
-        year_level: document.getElementById('year_level').value,
-        email: document.getElementById('email').value
-    };
-
-    const response = await fetch('/add-student', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(student)
-    });
-
-    const result = await response.text();
-
-    alert(result);
-
-    // CLEAR FORM
-
-    form.reset();
-
-    // RELOAD TABLE
-
-    loadStudents();
+            res.json({
+                success: true,
+                message: 'Student Added Successfully'
+            });
+        }
+    );
 });
-
-// DELETE STUDENT
-
-async function deleteStudent(id) {
-
-    await fetch(`/delete-student/${id}`, {
-        method: 'DELETE'
-    });
-
-    alert('Student Deleted');
-
-    loadStudents();
-}
-
-// EDIT STUDENT
-
-async function editStudent(id) {
-
-    const response = await fetch(`/student/${id}`);
-
-    const student = await response.json();
-
-    const newStudentID = prompt(
-        'Student ID',
-        student.student_id
-    );
-
-    const newName = prompt(
-        'Full Name',
-        student.full_name
-    );
-
-    const newCourse = prompt(
-        'Course',
-        student.course
-    );
-
-    const newYear = prompt(
-        'Year Level',
-        student.year_level
-    );
-
-    const newEmail = prompt(
-        'Email',
-        student.email
-    );
-
-    await fetch(`/update-student/${id}`, {
-        method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            student_id: newStudentID,
-            full_name: newName,
-            course: newCourse,
-            year_level: newYear,
-            email: newEmail
-        })
-    });
-
-    alert('Student Updated');
-
-    loadStudents();
-}
