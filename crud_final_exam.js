@@ -101,6 +101,7 @@ app.post('/add-student', (req, res) => {
                 console.log(err);
 
                 return res.status(500).json({
+                    success: false,
                     error: err.message
                 });
             }
@@ -130,6 +131,26 @@ app.delete('/delete-student/:id', (req, res) => {
             res.json({
                 success: true
             });
+        }
+    );
+});
+
+// GET SINGLE STUDENT
+
+app.get('/student/:id', (req, res) => {
+
+    const id = req.params.id;
+
+    db.query(
+        'SELECT * FROM students WHERE id=?',
+        [id],
+        (err, result) => {
+
+            if (err) {
+                return res.status(500).json(err);
+            }
+
+            res.json(result[0]);
         }
     );
 });
@@ -181,25 +202,7 @@ app.put('/update-student/:id', (req, res) => {
     );
 });
 
-// GET SINGLE STUDENT
-
-app.get('/student/:id', (req, res) => {
-
-    const id = req.params.id;
-
-    db.query(
-        'SELECT * FROM students WHERE id=?',
-        [id],
-        (err, result) => {
-
-            if (err) {
-                return res.status(500).json(err);
-            }
-
-            res.json(result[0]);
-        }
-    );
-});
+// SERVER
 
 const PORT = process.env.PORT || 3000;
 
