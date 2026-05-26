@@ -3,13 +3,11 @@ const mysql = require('mysql2');
 const bodyParser = require('body-parser');
 const path = require('path');
 const dotenv = require('dotenv');
-const cors = require('cors');
 
 dotenv.config();
 
 const app = express();
 
-app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(express.static('public'));
@@ -25,37 +23,20 @@ const db = mysql.createConnection({
     }
 });
 
-// CONNECT DATABASE
-
 db.connect((err) => {
     if (err) {
-        console.log('Database connection failed:', err);
+        console.log(err);
     } else {
-        console.log('Connected to Aiven MySQL Database');
+        console.log('Connected to Aiven MySQL');
     }
 });
 
-// HOME PAGE
-
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'views', 'index.html'));
+    res.send('Student Information Management System Running');
 });
 
-// GET ALL STUDENTS
+const PORT = process.env.PORT || 3000;
 
-app.get('/students', (req, res) => {
-    const sql = 'SELECT * FROM students';
-
-    db.query(sql, (err, result) => {
-        if (err) {
-            console.log(err);
-            res.status(500).send('Error fetching students');
-        } else {
-            res.json(result);
-        }
-    });
-});
-
-// ADD STUDENT
-
+app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
 });
