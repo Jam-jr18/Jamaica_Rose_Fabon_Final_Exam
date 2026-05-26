@@ -87,11 +87,11 @@ form.addEventListener('submit', async (e) => {
 
     } else {
 
-        alert('Failed to Add Student');
+        alert(data.error);
     }
 });
 
-// DELETE
+// DELETE STUDENT
 
 async function deleteStudent(id) {
 
@@ -102,7 +102,7 @@ async function deleteStudent(id) {
     loadStudents();
 }
 
-// EDIT
+// EDIT STUDENT
 
 async function editStudent(id) {
 
