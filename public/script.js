@@ -1,9 +1,48 @@
 const form = document.getElementById('studentForm');
+const studentTable = document.getElementById('studentTable');
+
+// LOAD STUDENTS
+
+async function loadStudents() {
+
+    const response = await fetch('/students');
+    const students = await response.json();
+
+    studentTable.innerHTML = '';
+
+    students.forEach(student => {
+
+        studentTable.innerHTML += `
+            <tr>
+                <td>${student.id}</td>
+                <td>${student.student_id}</td>
+                <td>${student.full_name}</td>
+                <td>${student.course}</td>
+                <td>${student.year_level}</td>
+                <td>${student.email}</td>
+
+                <td>
+                    <button onclick="editStudent(${student.id})">
+                        Edit
+                    </button>
+
+                    <button onclick="deleteStudent(${student.id})">
+                        Delete
+                    </button>
+                </td>
+            </tr>
+        `;
+    });
+}
+
+// LOAD ON START
+
 loadStudents();
 
 // ADD STUDENT
 
 form.addEventListener('submit', async (e) => {
+
     e.preventDefault();
 
     const student = {
@@ -14,7 +53,7 @@ form.addEventListener('submit', async (e) => {
         email: document.getElementById('email').value
     };
 
-    await fetch('/add-student', {
+    const response = await fetch('/add-student', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -22,36 +61,64 @@ form.addEventListener('submit', async (e) => {
         body: JSON.stringify(student)
     });
 
-    alert('Student Added Successfully');
+    const result = await response.text();
+
+    alert(result);
+
+    // CLEAR FORM
 
     form.reset();
+
+    // RELOAD TABLE
+
     loadStudents();
 });
 
 // DELETE STUDENT
 
 async function deleteStudent(id) {
-    if (confirm('Delete this student?')) {
-        await fetch(`/delete-student/${id}`, {
-            method: 'DELETE'
-        });
 
-        alert('Student Deleted');
-        loadStudents();
-    }
+    await fetch(`/delete-student/${id}`, {
+        method: 'DELETE'
+    });
+
+    alert('Student Deleted');
+
+    loadStudents();
 }
 
 // EDIT STUDENT
 
 async function editStudent(id) {
+
     const response = await fetch(`/student/${id}`);
+
     const student = await response.json();
 
-    const newStudentID = prompt('Student ID', student.student_id);
-    const newName = prompt('Full Name', student.full_name);
-    const newCourse = prompt('Course', student.course);
-    const newYear = prompt('Year Level', student.year_level);
-    const newEmail = prompt('Email', student.email);
+    const newStudentID = prompt(
+        'Student ID',
+        student.student_id
+    );
+
+    const newName = prompt(
+        'Full Name',
+        student.full_name
+    );
+
+    const newCourse = prompt(
+        'Course',
+        student.course
+    );
+
+    const newYear = prompt(
+        'Year Level',
+        student.year_level
+    );
+
+    const newEmail = prompt(
+        'Email',
+        student.email
+    );
 
     await fetch(`/update-student/${id}`, {
         method: 'PUT',
@@ -68,5 +135,6 @@ async function editStudent(id) {
     });
 
     alert('Student Updated');
+
     loadStudents();
 }
